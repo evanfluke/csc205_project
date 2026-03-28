@@ -20,8 +20,11 @@ import AppHeader from './components/AppHeader.vue'
 body { font-family: 'Segoe UI', sans-serif; }
 
 .app { background-color: #e8edf5; min-height: 100vh; display: flex; flex-direction: column; }
+.content { flex: 1; }
 
-.content { margin-top: 80px; padding: 40px; flex: 1; }
+
+/* .content { margin-top: 80px; padding: 40px; flex: 1; } */
+.content { margin-top: var(--content-margin, 80px); transition: margin-top 0.3s ease; }
 
 .footer {
   padding: 20px;

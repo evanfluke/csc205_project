@@ -5,6 +5,8 @@ import { useRouter }    from 'vue-router'
 import LoginModal          from './login.vue'
 import ChangePasswordModal from './changepassword.vue'
 
+const collapsed = ref(false)
+
 const auth       = useAuthStore()
 const router     = useRouter()
 const showLogin  = ref(false)
@@ -14,26 +16,31 @@ async function handleLogout() {
   await auth.logout()
   router.push('/')
 }
+
+function updateMargin() {
+  document.body.style.setProperty(
+    '--content-margin',
+    collapsed.value ? '10px' : '80px'
+  )
+}
+
 </script>
 
 <template>
-  <header class="header">
-    <span class="logo"><i class="fa-solid fa-bars"></i></span>
-
+  <div class="menu-tab" @click="collapsed = !collapsed; updateMargin()">
+  <i class="fa-solid fa-bars"></i>
+</div>
+<header :class="['header', { collapsed }]">
     <nav class="nav">
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/students">Students</RouterLink>
       <a href="https://my.geneva.edu/ics/" target="_blank">MyGeneva</a>
-      
+
     </nav>
     <!-- <nav class="nav">
       <RouterLink to="/"></RouterLink>
       <RouterLink to="/" v-if="auth.token"></RouterLink>
     </nav> -->
-
-
-
-
 
     <div class="auth-controls">
       <template v-if="auth.token">
@@ -65,7 +72,7 @@ async function handleLogout() {
 
 .logo { font-size: 1.2rem; font-weight: 700; color: #d4a72a; white-space: nowrap; }
 
-.nav { display: flex; gap: 20px; flex: 1; }
+.nav { display: flex; gap: 20px; flex: 1; margin-left: 50px; }
 .nav a { color: #ccc; text-decoration: none; font-size: 0.95rem; }
 .nav a.router-link-active { color: white; font-weight: 600; border-bottom: 2px solid #f0c040; }
 
@@ -82,4 +89,37 @@ async function handleLogout() {
   background: transparent; color: #000000; border: 1px solid #000000;
 }
 .btn-secondary:hover { border-color: #ffffff; color: white; }
+
+.header {
+  transition: transform 0.3s ease;
+}
+
+.header.collapsed {
+  transform: translateY(-100%);
+}
+
+.menu-tab {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 70px;
+  height: 70px;
+  background: black;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1001;
+  border-radius: 0 0 8px 0;
+}
+
+.header {
+  transition: transform 0.3s ease;
+}
+
+.header.collapsed {
+  transform: translateY(-100%);
+}
+
 </style>

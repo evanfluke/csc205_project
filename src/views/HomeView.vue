@@ -103,3 +103,5 @@ const semesters = [
 .panel-table a { text-decoration: none; color: #333; font-size: 0.9rem; }
 .panel-table a:hover { color: black; font-weight: 600; }
 </style>
+
+<!-- messy - add comments for the different parts-->

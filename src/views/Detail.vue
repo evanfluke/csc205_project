@@ -2,7 +2,7 @@
 defineProps({
   isOpen: Boolean,
   title: String,
-  fields: Array   // [{ label: 'Course', value: 'CS101' }, ...]
+  fields: Array 
 })
 defineEmits(['close'])
 </script>
