@@ -37,7 +37,7 @@ const semesters = [
           <div class="panel-header">Student Resources</div>
           <table class="panel-table">
             <tbody>
-              <tr><td><a href="#">Degree Plan</a></td></tr>
+              <tr><td><a href="https://www.geneva.edu/academics/registrar/pdf/4yr-plans/csc_web_tech-4yr-plan.pdf">Degree Plan</a></td></tr>
               <tr><td><a href="#">Completed Courses</a></td></tr>
               <tr><td><a href="#">Remaining Requirements</a></td></tr>
               <tr><td><a href="#">Add/Drop Major/Minor</a></td></tr>

@@ -1,28 +1,34 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-const API_BASE = 'placeholder'
+const API_BASE = 'https://checksheets.cscprof.com'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') ?? '')
   const user  = ref(JSON.parse(localStorage.getItem('user') ?? 'null'))
 
   function authHeaders() {
-    return { 'x-token': token.value, 'Content-Type': 'application/json' }
+    return { 'x-token': token.value }
   }
 
   async function login(username, password) {
+    const formData = new FormData()
+    formData.append('username', username)
+    formData.append('password', password)
+
     const res = await fetch(`${API_BASE}/auth/login`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ username, password })
+      method: 'POST',
+      body:   formData
     })
     if (!res.ok) throw new Error((await res.json()).message ?? 'Login failed')
     const data = await res.json()
-    token.value = data.token
-    user.value  = data.user
-    localStorage.setItem('token', data.token)
-    localStorage.setItem('user',  JSON.stringify(data.user))
+
+    const userData = Array.isArray(data) ? data[0] : data
+
+    token.value = userData.user_guid
+    user.value  = userData
+    localStorage.setItem('token', userData.user_guid)
+    localStorage.setItem('user',  JSON.stringify(userData))
   }
 
   async function logout() {
@@ -34,10 +40,14 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function changePassword(username, currentPassword, newPassword) {
+    const formData = new FormData()
+    formData.append('username', username)
+    formData.append('password', newPassword)
+
     const res = await fetch(`${API_BASE}/auth/password_reset`, {
       method:  'POST',
       headers: authHeaders(),
-      body:    JSON.stringify({ username, password: newPassword, token: token.value })
+      body:    formData
     })
     if (!res.ok) throw new Error((await res.json()).message ?? 'Password change failed')
   }

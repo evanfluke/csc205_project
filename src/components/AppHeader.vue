@@ -35,6 +35,7 @@ function updateMargin() {
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/students">Students</RouterLink>
       <a href="https://my.geneva.edu/ics/" target="_blank">MyGeneva</a>
+      <RouterLink to="/metrics">Metrics</RouterLink>
 
     </nav>
     <!-- <nav class="nav">
