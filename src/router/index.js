@@ -19,11 +19,8 @@ const router = createRouter({
     { path: '/', component: HomeView },
     { path: '/students', component: StudentsView },
     { path: '/students/id', component: StudentDetail },
-    { path: '/metrics', component: Metrics },
+    { path: '/metrics', component: MetricsView },
     { path: '/schedule', component: ScheduleView }
-    //switch to { path: '/students', component: StudentsView, meta: { requiresAuth: true} },
-    //{ path: '/students/id', component: StudentDetail, meta: { requiresAuth: true} },
-    //when the databse works
   ]
 })
 

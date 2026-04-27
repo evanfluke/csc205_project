@@ -1,20 +1,31 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
+import { useAuthStore } from '../stores/auth'
 
+const auth     = useAuthStore()
 const showInactive = ref(false)
 const sortKey  = ref('firstname')
 const sortDir  = ref(1)
-const loading  = ref(false)
+const loading  = ref(true)
 const error    = ref('')
 const search   = ref('')
+const students = ref([])
 
-const students = ref([
-  { student_id: 1, firstname: 'John',  lastname: 'Smith',   major: 'Computer Science', is_Active: true },
-  { student_id: 2, firstname: 'John', lastname: 'Johnson', major: 'Cybersecurity',     is_Active: true },
-  { student_id: 3, firstname: 'John',  lastname: 'Smythe',   major: 'Computer Science', is_Active: false },
-  { student_id: 4, firstname: 'John',  lastname: 'Smyth',  major: 'Philosophy',     is_Active: true },
-  { student_id: 5, firstname: 'John', lastname: 'John',   major: 'Computer Science', is_Active: false },
-])
+onMounted(async () => {
+  try {
+    const res = await fetch('https://checksheets.cscprof.com/students', {
+      headers: auth.authHeaders()
+    })
+    if (!res.ok) throw new Error('Failed to load students')
+    const data = await res.json()
+    students.value = Array.isArray(data) ? data : []
+    console.log('students:', students.value)
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
+})
 
 function sortBy(key) {
   if (sortKey.value === key) sortDir.value *= -1
@@ -39,7 +50,13 @@ const displayed = computed(() => {
     })
 })
 
-function toggleActive(student) {
+async function toggleActive(student) {
+  const updated = { ...student, is_Active: !student.is_Active }
+  await fetch('https://checksheets.cscprof.com/students', {
+    method:  'PUT',
+    headers: auth.authHeaders(),
+    body:    JSON.stringify(updated)
+  })
   student.is_Active = !student.is_Active
 }
 

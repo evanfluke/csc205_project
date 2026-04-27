@@ -1,10 +1,20 @@
 <script setup>
+
 const semesters = [
   'Fall Year 1', 'Spring Year 1',
   'Fall Year 2', 'Spring Year 2',
   'Fall Year 3', 'Spring Year 3',
   'Fall Year 4', 'Spring Year 4',
 ]
+
+import { useAuthStore } from '../stores/auth'
+import { useRouter } from 'vue-router'
+
+const auth = useAuthStore()
+const router = useRouter()
+
+if (auth.role === 'advisor') router.push('/students')
+
 </script>
 
 <template>
@@ -13,8 +23,8 @@ const semesters = [
       <div class="student-header">
         <i class="fa-solid fa-circle-user fa-2x"></i>
         <div>
-          <span class="student-name">John Smith</span>
-          <span class="student-sub">Computer Science | Junior</span>
+          <span class="student-name"></span>
+          <span class="student-sub"></span>
         </div>
       </div>
       <div class="left-panel">
@@ -84,6 +94,7 @@ const semesters = [
 .sem-table td { padding: 10px 14px; border-bottom: 1px solid #ccc; font-size: 0.9rem; }
 .sem-table tr:last-child td { border-bottom: none; }
 .status { color: #999; text-align: center; width: 80px; }
+.status { color: #343; text-align: center; width: 80px; }
 
 .panel-top { margin-bottom: 20px; }
 .panel-bottom { }
@@ -103,5 +114,3 @@ const semesters = [
 .panel-table a { text-decoration: none; color: #333; font-size: 0.9rem; }
 .panel-table a:hover { color: black; font-weight: 600; }
 </style>
-
-<!-- messy - add comments for the different parts-->

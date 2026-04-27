@@ -1,27 +1,26 @@
-
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { useAuthStore } from '../stores/auth'
-const role = ref('')
 
-defineProps<{ isOpen: boolean }>()
-const emit = defineEmits(['close'])
-
+const role     = ref('')
 const auth     = useAuthStore()
 const username = ref('')
 const password = ref('')
 const error    = ref('')
 const loading  = ref(false)
 
-function close() { if (!loading.value) { error.value = ''; emit('close') } }
+defineProps({ isOpen: Boolean })
+const emit = defineEmits(['close'])
+
+function close() { if (!loading.value) { error.value = ''; role.value = ''; emit('close') } }
 
 async function handleLogin() {
   error.value   = ''
   loading.value = true
   try {
-    await auth.login(username.value, password.value)
+    await auth.login(username.value, password.value, role.value)
     close()
-  } catch (err: any) {
+  } catch (err) {
     error.value = err.message
   } finally {
     loading.value = false
