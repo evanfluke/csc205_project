@@ -34,7 +34,7 @@ function sortBy(key) {
 
 const displayed = computed(() => {
   return students.value
-    .filter(s => showInactive.value || s.is_Active)
+    .filter(s => showInactive.value || s.is_Active == 1)
     .filter(s => {
       const q = search.value.toLowerCase()
       return (
