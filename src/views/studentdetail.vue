@@ -12,7 +12,7 @@ const error   = ref('')
 
 onMounted(async () => {
   try {
-    const res = await fetch(`https://checksheets.cscprof.com/studentcourses/${route.params.id}`, {
+    const res = await fetch(`https://checksheets.cscprof.com/studentcourses/}`, {
       headers: auth.authHeaders()
     })
     if (!res.ok) throw new Error('Failed to load student data')
@@ -55,13 +55,12 @@ function statusClass(status) {
 <template>
   <div class="detail">
 
-    <!-- Back link -->
     <RouterLink to="/students" class="back-link">← Back to Students</RouterLink>
 
     <div v-if="loading" class="info">Loading...</div>
     <div v-if="error"   class="error">{{ error }}</div>
 
-    <!-- Student header -->
+    <!--  header -->
     <div v-if="student" class="student-header">
       <i class="fa-solid fa-circle-user fa-3x"></i>
       <div>
@@ -70,7 +69,7 @@ function statusClass(status) {
       </div>
     </div>
 
-    <!-- Status legend -->
+    <!-- legend -->
     <div class="legend">
       <span class="badge status-passed">Passed</span>
       <span class="badge status-failed">Failed</span>

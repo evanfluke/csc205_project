@@ -29,7 +29,7 @@ onMounted(async () => {
     return
   }
   try {
-    const res = await fetch(`https://checksheets.cscprof.com/studentcourses/${auth.user?.student_id}`, {
+    const res = await fetch(`https://checksheets.cscprof.com/studentcourses`, {
       headers: auth.authHeaders()
     })
     if (!res.ok) throw new Error('Failed to load checksheet')
@@ -134,7 +134,7 @@ onMounted(async () => {
           <table class="panel-table">
             <tbody>
               <tr><td><a href="https://www.geneva.edu/academics/registrar/pdf/4yr-plans/csc_web_tech-4yr-plan.pdf" target="_blank">Degree Plan</a></td></tr>
-              <tr><td><a href="#">Completed Courses</a></td></tr>
+              <tr><td><RouterLink to="/metrics">Completed Courses</RouterLink></td></tr>
               <tr><td><a href="#">Remaining Requirements</a></td></tr>
               <tr><td><a href="#">Add/Drop Major/Minor</a></td></tr>
             </tbody>

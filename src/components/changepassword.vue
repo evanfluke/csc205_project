@@ -63,7 +63,6 @@ async function handleChange() {
 </template>
 
 <style scoped>
-/* same modal shell as LoginModal */
 .overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.55);
   display: flex; justify-content: center; align-items: center; z-index: 2000;
