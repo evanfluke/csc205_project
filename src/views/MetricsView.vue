@@ -62,6 +62,10 @@ const semesterCredits = computed(() =>
     inProgress: s.courses.filter(c => c.course_status === 'In-Progress').reduce((sum, c) => sum + (c.credits ?? 0), 0),
     scheduled:  s.courses.filter(c => c.course_status === 'Scheduled').reduce((sum, c)   => sum + (c.credits ?? 0), 0),
     total:      s.courses.reduce((sum, c) => sum + (c.credits ?? 0), 0),
+
+    // ----------------------------------------------------------------------------------------------------------------------
+
+    needed:     120
   }))
 )
 

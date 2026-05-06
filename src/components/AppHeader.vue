@@ -32,11 +32,11 @@ function updateMargin() {
 </div>
 <header :class="['header', { collapsed }]">
     <nav class="nav">
-      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/">Geneva Student Checksheets</RouterLink>
       <RouterLink to="/students">Students</RouterLink>
       <a href="https://my.geneva.edu/ics/" target="_blank">MyGeneva</a>
       <RouterLink to="/metrics">Metrics</RouterLink>
-      <RouterLink to="/ScheduleView">Schedule</RouterLink>
+      <RouterLink to="/schedule">Schedule</RouterLink>
 
     </nav>
     <!-- <nav class="nav">
@@ -88,7 +88,7 @@ function updateMargin() {
 }
 .btn-secondary {
   padding: 6px 16px; border-radius: 6px; cursor: pointer;
-  background: transparent; color: #000000; border: 1px solid #000000;
+  background: transparent; color: #ffffff; border: 1px solid #000000;
 }
 .btn-secondary:hover { border-color: #ffffff; color: white; }
 
