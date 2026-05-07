@@ -23,6 +23,14 @@ const transferCourses = ref([])
 const loading       = ref(true)
 const error         = ref('')
 
+import ChangeMajor from '../components/ChangeMajor.vue'
+const showChangeMajor = ref(false)
+const currentMajor   = ref(null)
+
+function handleMajorChange(major) {
+  currentMajor.value = major
+}
+
 onMounted(async () => {
   if (!auth.user?.student_id) {
     loading.value = false
@@ -57,16 +65,14 @@ onMounted(async () => {
   <div class="home">
     <div class="layout">
 
-      <!-- Student header -->
+      <!-- Student header name and major -->
       <div class="student-header">
         <i class="fa-solid fa-circle-user fa-2x"></i>
         <div>
           <span class="student-name">
             {{ auth.user?.firstname }} {{ auth.user?.lastname }}
           </span>
-          <span class="student-sub">
-            {{ student?.major ?? '' }}
-          </span>
+          <span class="student-sub">{{ currentMajor?.major_name ?? student?.major ?? '' }}</span>
         </div>
       </div>
 
@@ -136,7 +142,7 @@ onMounted(async () => {
               <tr><td><a href="https://www.geneva.edu/academics/registrar/pdf/4yr-plans/csc_web_tech-4yr-plan.pdf" target="_blank">Degree Plan</a></td></tr>
               <tr><td><RouterLink to="/metrics">Completed Courses</RouterLink></td></tr>
               <tr><td><a href="#">Remaining Requirements</a></td></tr>
-              <tr><td><a href="#">Add/Drop Major/Minor</a></td></tr>
+              <tr><td><a href="#" @click.prevent="showChangeMajor = true">Change Major</a></td></tr>
             </tbody>
           </table>
         </div>
