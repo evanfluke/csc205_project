@@ -2,74 +2,46 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 
+import { useChecksheetStore } from '../stores/checksheet'
+const checksheet = useChecksheetStore()
+
 const auth    = useAuthStore()
 const loading = ref(true)
 const error   = ref('')
 
-// Declare each semester for the chart and table
-const semesters = ref([
-  { name: 'Transfer Credits', courses: []},
-  { name: 'Fall Year 1',   courses: [] },
-  { name: 'Spring Year 1', courses: [] },
-  { name: 'Fall Year 2',   courses: [] },
-  { name: 'Spring Year 2', courses: [] },
-  { name: 'Fall Year 3',   courses: [] },
-  { name: 'Spring Year 3', courses: [] },
-  { name: 'Fall Year 4',   courses: [] },
-  { name: 'Spring Year 4', courses: [] },
-])
+// const semesters = ref([
+//   { name: 'Transfer Credits', courses: []},
+//   { name: 'Fall Year 1',   courses: [] },
+//   { name: 'Spring Year 1', courses: [] },
+//   { name: 'Fall Year 2',   courses: [] },
+//   { name: 'Spring Year 2', courses: [] },
+//   { name: 'Fall Year 3',   courses: [] },
+//   { name: 'Spring Year 3', courses: [] },
+//   { name: 'Fall Year 4',   courses: [] },
+//   { name: 'Spring Year 4', courses: [] },
+// ])
 
-onMounted(async () => {
-  if (!auth.user?.student_id) {
-    loading.value = false
-    return
-  }
-  try {
-    const res = await fetch(`https://checksheets.cscprof.com/studentcourses/${auth.user?.student_id}`, {
-      headers: auth.authHeaders()
-    })
-    if (!res.ok) throw new Error('Failed to load data')
-    const data = await res.json()
+const semesters = checksheet.semesters
 
-    const groups = {}
-    for (const c of (data.courses ?? [])) {
-      const key = c.semester_name ?? 'Unassigned'
-      if (!groups[key]) groups[key] = []
-      groups[key].push(c)
-    }
-    if (Object.keys(groups).length > 0) {
-      semesters.value = Object.entries(groups).map(([name, courses]) => ({ name, courses }))
-    }
-  } catch (err) {
-    error.value = err.message
-  } finally {
-    loading.value = false
-  }
-})
+const allCourses = computed(() => semesters.flatMap(s => s.courses))
 
-const allCourses = computed(() => semesters.value.flatMap(s => s.courses))
-
-const totalEarned     = computed(() => allCourses.value.filter(c => c.course_status === 'Passed').reduce((sum, c)   => sum + (c.credits ?? 0), 0))
+const totalEarned     = computed(() => allCourses.value.filter(c => c.course_status === 'Passed').reduce((sum, c) => sum + (c.credits ?? 0), 0))
 const totalInProgress = computed(() => allCourses.value.filter(c => c.course_status === 'In-Progress').reduce((sum, c) => sum + (c.credits ?? 0), 0))
-const totalScheduled  = computed(() => allCourses.value.filter(c => c.course_status === 'Scheduled').reduce((sum, c)  => sum + (c.credits ?? 0), 0))
+const totalScheduled  = computed(() => allCourses.value.filter(c => c.course_status === 'Scheduled').reduce((sum, c) => sum + (c.credits ?? 0), 0))
 const totalAll        = computed(() => allCourses.value.reduce((sum, c) => sum + (c.credits ?? 0), 0))
 
-// Add credits together for the semesters
 const semesterCredits = computed(() =>
-  semesters.value.map(s => ({
+  semesters.map(s => ({
     name:       s.name,
-    earned:     s.courses.filter(c => c.course_status === 'Passed').reduce((sum, c)      => sum + (c.credits ?? 0), 0),
+    earned:     s.courses.filter(c => c.course_status === 'Passed').reduce((sum, c) => sum + (c.credits ?? 0), 0),
     inProgress: s.courses.filter(c => c.course_status === 'In-Progress').reduce((sum, c) => sum + (c.credits ?? 0), 0),
-    scheduled:  s.courses.filter(c => c.course_status === 'Scheduled').reduce((sum, c)   => sum + (c.credits ?? 0), 0),
+    scheduled:  s.courses.filter(c => c.course_status === 'Scheduled').reduce((sum, c) => sum + (c.credits ?? 0), 0),
     total:      s.courses.reduce((sum, c) => sum + (c.credits ?? 0), 0),
-
-    // ----------------------------------------------------------------------------------------------------------------------
-
-    needed:     120
   }))
 )
 
 const maxCredits = computed(() => Math.max(...semesterCredits.value.map(s => s.total), 1))
+
 </script>
 
 <template>

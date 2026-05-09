@@ -2,20 +2,25 @@
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 
+import { useChecksheetStore } from '../stores/checksheet'
+const checksheet = useChecksheetStore()
+
 const auth    = useAuthStore()
 const loading = ref(true)
 const error   = ref('')
 
-const allSemesters = ref([
-  { name: 'Fall Year 1',   courses: [] },
-  { name: 'Spring Year 1', courses: [] },
-  { name: 'Fall Year 2',   courses: [] },
-  { name: 'Spring Year 2', courses: [] },
-  { name: 'Fall Year 3',   courses: [] },
-  { name: 'Spring Year 3', courses: [] },
-  { name: 'Fall Year 4',   courses: [] },
-  { name: 'Spring Year 4', courses: [] },
-])
+// const allSemesters = ref([
+//   { name: 'Fall Year 1',   courses: [] },
+//   { name: 'Spring Year 1', courses: [] },
+//   { name: 'Fall Year 2',   courses: [] },
+//   { name: 'Spring Year 2', courses: [] },
+//   { name: 'Fall Year 3',   courses: [] },
+//   { name: 'Spring Year 3', courses: [] },
+//   { name: 'Fall Year 4',   courses: [] },
+//   { name: 'Spring Year 4', courses: [] },
+// ])
+
+const semesters = checksheet.semesters
 
 const selectedSemester = ref('Fall Year 1')
 
@@ -48,7 +53,7 @@ onMounted(async () => {
 })
 
 const currentSemester = computed(() =>
-  allSemesters.value.find(s => s.name === selectedSemester.value) ?? { name: '', courses: [] }
+  semesters.find(s => s.name === selectedSemester.value) ?? { name: '', courses: [] }
 )
 
 const totalCredits = computed(() =>
@@ -72,7 +77,7 @@ function statusClass(status) {
 <template>
   <div class="schedule">
     <p>loading: {{ loading }}</p>
-    <p>semesters: {{ allSemesters.length }}</p>
+    <p>semesters: {{ semesters.length }}</p>
 
     <div class="toolbar">
       <h2 class="page-title">Schedule View</h2>
@@ -80,13 +85,12 @@ function statusClass(status) {
       <div class="selector">
         <label>Semester</label>
         <select v-model="selectedSemester">
-          <option v-for="sem in allSemesters" :key="sem.name" :value="sem.name">
+          <option v-for="sem in semesters" :key="sem.name" :value="sem.name">
             {{ sem.name }}
           </option>
         </select>
       </div>
 
-      <!-- button group with print and pdf buttons -->
       <div class="btn-group">
         <button class = "btn=pdf" onclick="window.print()">
             <i class="fa-regular fa-file-pdf"></i>
@@ -103,7 +107,6 @@ function statusClass(status) {
     <div v-if="loading" class="info">Loading...</div>
     <div v-if="error"   class="error">{{ error }}</div>
 
-    <!-- Schedule table -->
     <div class="schedule-card">
       <div class="schedule-header">
         <div>
