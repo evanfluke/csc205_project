@@ -147,9 +147,9 @@ const maxCredits = computed(() => Math.max(...semesterCredits.value.map(s => s.t
 .bar-group { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 60px; }
 .bar-wrap { display: flex; align-items: flex-end; gap: 3px; }
 .bar { width: 14px; border-radius: 4px 4px 0 0; transition: height 0.3s; min-height: 2px; }
-.bar-earned     { background: #22c55e; }
-.bar-inprogress { background: #3b82f6; }
-.bar-scheduled  { background: #f97316; }
+.bar-earned     { background: #13823c; }
+.bar-inprogress { background: #0e449a; }
+.bar-scheduled  { background: #ffb224; }
 .bar-total      { background: #e5e7eb; }
 .bar-label { font-size: 0.65rem; text-align: center; color: #555; }
 .chart-legend { display: flex; gap: 16px; font-size: 0.8rem; margin-top: 8px; flex-wrap: wrap; }
